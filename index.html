@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VisaPath — Vize Danışmanlık</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F3A;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #F5F0E8;
+    --white: #FEFCF8;
+    --gray: #8A8F9A;
+    --light-gray: #E8E4DC;
+    --text: #1A2A3A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(11,31,58,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    transition: padding 0.3s;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  .logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: rgba(254,252,248,0.75);
+    text-decoration: none;
+    font-size: 13px; font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy) !important;
+    padding: 10px 22px;
+    border-radius: 2px;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 120px 60px 80px;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 800px 600px at 80% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 400px at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 7px 16px; border-radius: 20px;
+    color: var(--gold); font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before { content: '●'; font-size: 8px; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.15;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 300;
+  }
+  .hero-desc {
+    color: rgba(254,252,248,0.65);
+    font-size: 16px; line-height: 1.7;
+    margin: 24px 0 40px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-btns { display: flex; gap: 16px; animation: fadeUp 0.8s 0.3s ease both; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 15px 32px; border: none; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 15px 32px;
+    border: 1px solid rgba(254,252,248,0.25);
+    border-radius: 2px;
+    font-size: 14px; font-weight: 400;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    display: flex; gap: 40px;
+    margin-top: 56px; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 400; color: var(--gold);
+  }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; letter-spacing: 0.5px; }
+
+  /* Hero visual */
+  .hero-visual {
+    position: relative; animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .passport-card {
+    background: linear-gradient(135deg, #1a3a5c 0%, #0f2540 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 12px; padding: 36px;
+    position: relative; overflow: hidden;
+  }
+  .passport-card::before {
+    content: '';
+    position: absolute; top: -50%; right: -30%;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%);
+  }
+  .passport-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  .passport-title { color: rgba(255,255,255,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+  .passport-country {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--white); margin-top: 4px;
+  }
+  .passport-stamp {
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 11px; text-align: center;
+    line-height: 1.2; font-weight: 500;
+  }
+  .country-flags {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px;
+  }
+  .flag-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; padding: 14px 10px;
+    text-align: center; transition: all 0.2s; cursor: pointer;
+  }
+  .flag-item:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .flag-emoji { font-size: 24px; }
+  .flag-name { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .success-bar {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .success-label { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .success-pct { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold); }
+  .progress-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 10px; }
+  .progress-fill { height: 100%; width: 97%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 2px; animation: progress 1.5s 1s ease both; }
+  @keyframes progress { from { width: 0 } to { width: 97% } }
+
+  /* SECTION COMMONS */
+  section { padding: 100px 60px; }
+  .section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--gold); margin-bottom: 14px;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300; line-height: 1.2;
+    color: var(--navy);
+  }
+  h2 em { font-style: italic; color: var(--gold); }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+
+  /* SERVICES */
+  .services { background: var(--cream); }
+  .services-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: end; margin-bottom: 64px;
+  }
+  .services-desc { color: var(--gray); font-size: 16px; line-height: 1.7; }
+  .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .service-card {
+    background: var(--white);
+    border: 1px solid var(--light-gray);
+    border-radius: 8px; padding: 36px 28px;
+    transition: all 0.3s; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold); transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .service-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(11,31,58,0.1); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    font-size: 32px; margin-bottom: 20px;
+    display: block;
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .service-desc { font-size: 14px; color: var(--gray); line-height: 1.65; }
+  .service-tag {
+    display: inline-block; margin-top: 20px;
+    background: rgba(201,168,76,0.1); color: var(--gold);
+    font-size: 11px; padding: 5px 12px; border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* COUNTRIES */
+  .countries { background: var(--navy); }
+  .countries h2 { color: var(--white); }
+  .countries-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
+  .countries-header p { color: rgba(255,255,255,0.55); font-size: 15px; max-width: 400px; line-height: 1.7; }
+  .countries-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .country-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 24px;
+    display: flex; align-items: center; gap: 16px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .country-card:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
+  .country-flag { font-size: 28px; }
+  .country-info { flex: 1; }
+  .country-name { color: var(--white); font-size: 15px; font-weight: 400; }
+  .country-type { color: rgba(255,255,255,0.45); font-size: 12px; margin-top: 2px; }
+  .country-arrow { color: var(--gold); font-size: 18px; }
+
+  /* PROCESS */
+  .process { background: var(--white); }
+  .process-steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; margin-top: 64px; position: relative; }
+  .process-steps::before {
+    content: ''; position: absolute;
+    top: 32px; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold), var(--gold), transparent);
+    opacity: 0.3;
+  }
+  .step { text-align: center; padding: 0 16px; position: relative; }
+  .step-num {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--gold);
+    background: var(--white);
+    position: relative; z-index: 1;
+  }
+  .step-title { font-size: 15px; font-weight: 500; color: var(--navy); margin-bottom: 8px; }
+  .step-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  /* PRICING */
+  .pricing { background: var(--cream); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 60px; }
+  .pricing-card {
+    background: var(--white);
+    border: 1px solid var(--light-gray);
+    border-radius: 10px; padding: 40px 32px;
+    position: relative; transition: all 0.3s;
+  }
+  .pricing-card:hover { transform: translateY(-6px); box-shadow: 0 24px 80px rgba(11,31,58,0.12); }
+  .pricing-card.featured {
+    background: var(--navy);
+    border-color: var(--gold);
+    transform: scale(1.03);
+  }
+  .pricing-card.featured:hover { transform: scale(1.03) translateY(-6px); }
+  .featured-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--navy);
+    font-size: 11px; font-weight: 600; padding: 5px 16px; border-radius: 20px;
+    letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap;
+  }
+  .plan-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; color: var(--navy); margin-bottom: 6px;
+  }
+  .pricing-card.featured .plan-name { color: var(--white); }
+  .plan-subtitle { font-size: 13px; color: var(--gray); margin-bottom: 28px; }
+  .pricing-card.featured .plan-subtitle { color: rgba(255,255,255,0.55); }
+  .price {
+    margin-bottom: 32px; padding-bottom: 28px;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .pricing-card.featured .price { border-color: rgba(255,255,255,0.1); }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; color: var(--navy); line-height: 1;
+  }
+  .pricing-card.featured .price-amount { color: var(--gold); }
+  .price-currency { font-size: 22px; vertical-align: super; margin-right: 4px; }
+  .price-period { font-size: 13px; color: var(--gray); margin-top: 6px; }
+  .pricing-card.featured .price-period { color: rgba(255,255,255,0.45); }
+  .features-list { list-style: none; margin-bottom: 32px; }
+  .features-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 14px; color: var(--text);
+    padding: 9px 0; border-bottom: 1px solid var(--light-gray);
+  }
+  .pricing-card.featured .features-list li { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.07); }
+  .features-list li::before {
+    content: '✓';
+    color: var(--gold); font-size: 13px; font-weight: 600;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .features-list li.excluded { opacity: 0.4; }
+  .features-list li.excluded::before { content: '–'; color: var(--gray); }
+  .btn-plan {
+    width: 100%; padding: 14px;
+    border: 1px solid var(--navy);
+    background: transparent; color: var(--navy);
+    border-radius: 4px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-plan:hover { background: var(--navy); color: var(--white); }
+  .pricing-card.featured .btn-plan {
+    background: var(--gold); color: var(--navy);
+    border-color: var(--gold);
+  }
+  .pricing-card.featured .btn-plan:hover { background: var(--gold-light); }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--white); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 56px; }
+  .testimonial-card {
+    border: 1px solid var(--light-gray);
+    border-radius: 8px; padding: 32px;
+    transition: all 0.3s;
+  }
+  .testimonial-card:hover { border-color: var(--gold); box-shadow: 0 12px 40px rgba(11,31,58,0.08); }
+  .quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 60px; color: var(--gold);
+    line-height: 0.6; margin-bottom: 20px; display: block;
+  }
+  .testimonial-text { font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 24px; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 14px; }
+  .author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--navy); display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .author-name { font-weight: 500; font-size: 14px; color: var(--navy); }
+  .author-trip { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .stars { color: var(--gold); font-size: 12px; margin-bottom: 2px; }
+
+  /* FAQ */
+  .faq { background: var(--cream); }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 56px; align-items: start; }
+  .faq-list { display: flex; flex-direction: column; gap: 0; }
+  .faq-item { border-bottom: 1px solid var(--light-gray); }
+  .faq-question {
+    width: 100%; background: none; border: none;
+    text-align: left; padding: 20px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; color: var(--navy);
+    cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; gap: 20px;
+  }
+  .faq-question:hover { color: var(--gold); }
+  .faq-icon { color: var(--gold); font-size: 20px; flex-shrink: 0; transition: transform 0.2s; }
+  .faq-answer {
+    font-size: 14px; color: var(--gray); line-height: 1.7;
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s;
+  }
+  .faq-answer.open { max-height: 200px; padding-bottom: 16px; }
+  .faq-icon.open { transform: rotate(45deg); }
+
+  .faq-contact-box {
+    background: var(--navy); border-radius: 10px;
+    padding: 48px 40px; text-align: center;
+    position: sticky; top: 100px;
+  }
+  .faq-contact-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--white); margin-bottom: 14px;
+  }
+  .faq-contact-box p { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7; margin-bottom: 32px; }
+  .contact-items { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+  .contact-item {
+    display: flex; align-items: center; gap: 14px;
+    text-align: left; color: rgba(255,255,255,0.8);
+    font-size: 14px;
+  }
+  .contact-icon {
+    width: 40px; height: 40px;
+    background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #060F1A; padding: 64px 60px 32px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; max-width: 1200px; margin: 0 auto; }
+  .footer-brand .logo { font-size: 22px; }
+  .footer-brand p { color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 260px; }
+  .footer-col h4 { color: rgba(255,255,255,0.7); font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1200px; margin: 48px auto 0;
+    padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 13px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* FLOATING CTA */
+  .float-cta {
+    position: fixed; bottom: 32px; right: 32px; z-index: 99;
+    background: var(--gold); color: var(--navy);
+    padding: 14px 24px; border-radius: 30px;
+    font-size: 13px; font-weight: 600;
+    box-shadow: 0 8px 32px rgba(201,168,76,0.4);
+    text-decoration: none; display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+  }
+  .float-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.5); }
+
+  @media (max-width: 1024px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-grid, .services-header, .faq-grid, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { display: none; }
+    .services-grid, .pricing-grid, .testimonials-grid, .countries-grid { grid-template-columns: 1fr 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .process-steps::before { display: none; }
+    .pricing-card.featured { transform: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .services-grid, .pricing-grid, .testimonials-grid, .countries-grid { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Visa<span>Path</span></div>
+  <ul class="nav-links">
+    <li><a href="#hizmetler">Hizmetler</a></li>
+    <li><a href="#ulkeler">Ülkeler</a></li>
+    <li><a href="#surec">Süreç</a></li>
+    <li><a href="#fiyatlar">Fiyatlar</a></li>
+    <li><a href="#iletisim" class="nav-cta">Ücretsiz Danışma</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-badge">%97 Onay Oranı · 10+ Yıl Deneyim</div>
+      <h1>Hayalinizdeki<br><em>Vizеye</em> Açılan<br>Kapı</h1>
+      <p class="hero-desc">
+        Schengen'den ABD'ye, öğrenci vizesinden çalışma iznine — tüm vize süreçlerinizde uzman kadromuzla yanınızdayız. Belgelerinizi hazırlıyor, randevunuzu alıyor, başarıya ulaşıyoruz.
+      </p>
+      <div class="hero-btns">
+        <a href="#fiyatlar" class="btn-primary">Hemen Başla</a>
+        <a href="#surec" class="btn-secondary">Nasıl Çalışır?</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">12.400+</div>
+          <div class="stat-label">Başarılı Başvuru</div>
+        </div>
+        <div>
+          <div class="stat-num">%97</div>
+          <div class="stat-label">Onay Oranı</div>
+        </div>
+        <div>
+          <div class="stat-num">85+</div>
+          <div class="stat-label">Ülke</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="passport-card">
+        <div class="passport-header">
+          <div>
+            <div class="passport-title">Aktif Başvurular</div>
+            <div class="passport-country">Schengen Bölgesi</div>
+          </div>
+          <div class="passport-stamp">ONAY<br>GELDİ</div>
+        </div>
+        <div class="country-flags">
+          <div class="flag-item"><div class="flag-emoji">🇩🇪</div><div class="flag-name">Almanya</div></div>
+          <div class="flag-item"><div class="flag-emoji">🇫🇷</div><div class="flag-name">Fransa</div></div>
+          <div class="flag-item"><div class="flag-emoji">🇮🇹</div><div class="flag-name">İtalya</div></div>
+          <div class="flag-item"><div class="flag-emoji">🇺🇸</div><div class="flag-name">ABD</div></div>
+          <div class="flag-item"><div class="flag-emoji">🇬🇧</div><div class="flag-name">İngiltere</div></div>
+          <div class="flag-item"><div class="flag-emoji">🇨🇦</div><div class="flag-name">Kanada</div></div>
+        </div>
+        <div class="success-bar">
+          <div>
+            <div class="success-label">Başarı Oranı</div>
+            <div class="success-pct">%97</div>
+          </div>
+          <div style="flex:1; margin-left:20px;">
+            <div class="progress-track"><div class="progress-fill"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="hizmetler">
+  <div class="section-inner">
+    <div class="services-header reveal">
+      <div>
+        <div class="section-label">Hizmetlerimiz</div>
+        <h2>Her Vize Türü için<br><em>Uzman Destek</em></h2>
+      </div>
+      <p class="services-desc">Turizm vizesinden oturma iznine, öğrenci vizesinden iş vizesine kadar tüm başvuru süreçlerini eksiksiz yönetiyoruz.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-icon">✈️</span>
+        <div class="service-name">Turizm Vizesi</div>
+        <div class="service-desc">Schengen, ABD, İngiltere, Kanada ve 85+ ülke için turizm vize başvurusu. Eksiksiz dosya hazırlama ve randevu takibi.</div>
+        <span class="service-tag">En Popüler</span>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.1s">
+        <span class="service-icon">🎓</span>
+        <div class="service-name">Öğrenci Vizesi</div>
+        <div class="service-desc">Yurt dışı eğitim hayaliniz için öğrenci vizesi başvurusu, kabul mektubu danışmanlığı ve harç belgesi desteği.</div>
+        <span class="service-tag">Yeni</span>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.2s">
+        <span class="service-icon">💼</span>
+        <div class="service-name">İş & Çalışma Vizesi</div>
+        <div class="service-desc">İş seyahati vize başvuruları ve çalışma izni süreçlerinde kapsamlı danışmanlık ve evrak hazırlama hizmeti.</div>
+        <span class="service-tag">Premium</span>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.1s">
+        <span class="service-icon">🏠</span>
+        <div class="service-name">Oturma İzni</div>
+        <div class="service-desc">Uzun dönem ikametler için oturma izni başvuruları, yenileme işlemleri ve yasal süreç takibi.</div>
+        <span class="service-tag">Uzman</span>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.2s">
+        <span class="service-icon">👨‍👩‍👧</span>
+        <div class="service-name">Aile Birleşimi</div>
+        <div class="service-desc">Yurt dışındaki aile fertlerinizi yanınıza almak için sponsor vize ve aile birleşimi başvurularında tam destek.</div>
+        <span class="service-tag">Güvenilir</span>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.3s">
+        <span class="service-icon">🌍</span>
+        <div class="service-name">Göçmenlik</div>
+        <div class="service-desc">Kalıcı oturum ve vatandaşlık başvuruları için stratejik danışmanlık, evrak hazırlama ve hukuki yönlendirme.</div>
+        <span class="service-tag">Özel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTRIES -->
+<section class="countries" id="ulkeler">
+  <div class="section-inner">
+    <div class="countries-header reveal">
+      <div>
+        <div class="section-label" style="color:var(--gold)">Desteklenen Ülkeler</div>
+        <h2>85+ Ülkede<br><em>Vize Desteği</em></h2>
+      </div>
+      <p>En çok talep gören ülkeler için özel birimlerimiz ve güncel konsolosluk ilişkilerimizle hızlı ve güvenilir hizmet.</p>
+    </div>
+    <div class="countries-grid reveal">
+      <div class="country-card"><div class="country-flag">🇩🇪</div><div class="country-info"><div class="country-name">Almanya</div><div class="country-type">Schengen · Turistik / İş</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇺🇸</div><div class="country-info"><div class="country-name">Amerika Birleşik Devletleri</div><div class="country-type">B1/B2 · F1 · H1B</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇬🇧</div><div class="country-info"><div class="country-name">İngiltere</div><div class="country-type">Standard Visitor · Student</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇨🇦</div><div class="country-info"><div class="country-name">Kanada</div><div class="country-type">TRV · Study · Work Permit</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇫🇷</div><div class="country-info"><div class="country-name">Fransa</div><div class="country-type">Schengen · Long Stay</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇮🇹</div><div class="country-info"><div class="country-name">İtalya</div><div class="country-type">Schengen · Turistik</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇦🇺</div><div class="country-info"><div class="country-name">Avustralya</div><div class="country-type">Tourist · Student · WHV</div></div><div class="country-arrow">→</div></div>
+      <div class="country-card"><div class="country-flag">🇳🇱</div><div class="country-info"><div class="country-name">Hollanda</div><div class="country-type">Schengen · MVV</div></div><div class="country-arrow">→</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="surec">
+  <div class="section-inner">
+    <div style="text-align:center" class="reveal">
+      <div class="section-label">Nasıl Çalışır?</div>
+      <h2>5 Adımda <em>Vize Onayı</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Ücretsiz Danışma</div>
+        <div class="step-desc">Vize türü, ülke ve koşullarınızı değerlendiririz. Size özel strateji belirleriz.</div>
+      </div>
+      <div class="step reveal" style="transition-delay:0.1s">
+        <div class="step-num">02</div>
+        <div class="step-title">Evrak Listesi</div>
+        <div class="step-desc">Eksiklerinizi tespit eder, gerekli belgelerin detaylı listesini paylaşırız.</div>
+      </div>
+      <div class="step reveal" style="transition-delay:0.2s">
+        <div class="step-num">03</div>
+        <div class="step-title">Dosya Hazırlama</div>
+        <div class="step-desc">Tüm belgelerinizi inceliyor, dilekçe ve formaları eksiksiz dolduruyoruz.</div>
+      </div>
+      <div class="step reveal" style="transition-delay:0.3s">
+        <div class="step-num">04</div>
+        <div class="step-title">Başvuru & Randevu</div>
+        <div class="step-desc">Konsolosluk randevusunu alıyor, başvuruyu sizin adınıza takip ediyoruz.</div>
+      </div>
+      <div class="step reveal" style="transition-delay:0.4s">
+        <div class="step-num">05</div>
+        <div class="step-title">Vize Onayı 🎉</div>
+        <div class="step-desc">Sonuç bildirimini anlık iletiyoruz. Pasaportunuzu teslim ediyoruz.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="fiyatlar">
+  <div class="section-inner">
+    <div style="text-align:center" class="reveal">
+      <div class="section-label">Fiyatlandırma</div>
+      <h2>Şeffaf & <em>Uygun Fiyatlar</em></h2>
+      <p style="color:var(--gray);margin-top:14px;font-size:15px;">Konsolosluk harçları hariç danışmanlık ücretlerimiz. KDV dahil.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <!-- Temel -->
+      <div class="pricing-card reveal">
+        <div class="plan-name">Temel</div>
+        <div class="plan-subtitle">Basit başvurular için</div>
+        <div class="price">
+          <div class="price-amount"><span class="price-currency">₺</span>1.490</div>
+          <div class="price-period">tek seferlik ödeme</div>
+        </div>
+        <ul class="features-list">
+          <li>Evrak listesi ve rehberlik</li>
+          <li>Vize formu doldurma</li>
+          <li>Ön değerlendirme</li>
+          <li>E-posta desteği</li>
+          <li class="excluded">Randevu alma hizmeti</li>
+          <li class="excluded">Birebir görüşme</li>
+          <li class="excluded">Ret durumunda itiraz</li>
+        </ul>
+        <button class="btn-plan" onclick="alert('Temel paket için iletişime geçin!')">Paketi Seç</button>
+      </div>
+
+      <!-- Standart (featured) -->
+      <div class="pricing-card featured reveal" style="transition-delay:0.1s">
+        <div class="featured-badge">⭐ En Çok Tercih</div>
+        <div class="plan-name">Standart</div>
+        <div class="plan-subtitle">Tam kapsamlı hizmet</div>
+        <div class="price">
+          <div class="price-amount"><span class="price-currency">₺</span>2.990</div>
+          <div class="price-period">tek seferlik ödeme</div>
+        </div>
+        <ul class="features-list">
+          <li>Kapsamlı evrak hazırlama</li>
+          <li>Vize formu doldurma</li>
+          <li>Randevu alma hizmeti</li>
+          <li>Birebir online görüşme</li>
+          <li>WhatsApp destek hattı</li>
+          <li>Mülakat hazırlık koçluğu</li>
+          <li class="excluded">Ret durumunda itiraz</li>
+        </ul>
+        <button class="btn-plan" onclick="alert('Standart paket için iletişime geçin!')">Paketi Seç</button>
+      </div>
+
+      <!-- Premium -->
+      <div class="pricing-card reveal" style="transition-delay:0.2s">
+        <div class="plan-name">Premium</div>
+        <div class="plan-subtitle">Garantili başarı hedefi</div>
+        <div class="price">
+          <div class="price-amount"><span class="price-currency">₺</span>4.990</div>
+          <div class="price-period">tek seferlik ödeme</div>
+        </div>
+        <ul class="features-list">
+          <li>VIP evrak hazırlama</li>
+          <li>Vize formu doldurma</li>
+          <li>Öncelikli randevu takibi</li>
+          <li>Sınırsız görüşme hakkı</li>
+          <li>7/24 öncelikli destek</li>
+          <li>Mülakat hazırlık koçluğu</li>
+          <li>Ret durumunda ücretsiz itiraz</li>
+        </ul>
+        <button class="btn-plan" onclick="alert('Premium paket için iletişime geçin!')">Paketi Seç</button>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:28px;" class="reveal">
+      <p style="color:var(--gray);font-size:13px;">💡 Oturma izni ve göçmenlik hizmetleri için özel teklif alabilirsiniz. <a href="#iletisim" style="color:var(--gold);">Bize ulaşın →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-inner">
+    <div style="text-align:center" class="reveal">
+      <div class="section-label">Müşteri Yorumları</div>
+      <h2>Başarı <em>Hikayeleri</em></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <span class="quote-mark">"</span>
+        <p class="testimonial-text">Almanya Schengen vizemi 3 kez reddettirmişlerdi. VisaPath ekibi dosyamı baştan sona yeniden hazırladı, ilk seferinde onaylandım. Harikaydılar.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">M</div>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="author-name">Mehmet Yılmaz</div>
+            <div class="author-trip">İstanbul → Berlin</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:0.1s">
+        <span class="quote-mark">"</span>
+        <p class="testimonial-text">ABD öğrenci vizesi başvurumda hem DS-160 formundan hem mülakat hazırlığına kadar her adımda desteklediler. Artık Boston'da okuyorum!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="author-name">Ayşe Kaya</div>
+            <div class="author-trip">Ankara → Boston</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:0.2s">
+        <span class="quote-mark">"</span>
+        <p class="testimonial-text">Kanada çalışma izni sürecini tamamen onlar yönetti. Evraklarımı hazırladılar, randevumu aldılar ve 6 haftada vizem geldi. Teşekkürler!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">E</div>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="author-name">Emre Demir</div>
+            <div class="author-trip">İzmir → Toronto</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="iletisim">
+  <div class="section-inner">
+    <div class="faq-grid">
+      <div>
+        <div class="section-label reveal">Sık Sorulan Sorular</div>
+        <h2 class="reveal">Aklınızdaki <em>Sorular</em></h2>
+        <div class="faq-list" style="margin-top:36px">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Vize başvurusu ne kadar sürer?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">Konsolosluk türüne ve ülkeye göre değişmekle birlikte Schengen başvuruları ortalama 2–4 haftada, ABD başvuruları 3–8 haftada sonuçlanır. Acele başvuru seçenekleri için bize danışabilirsiniz.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Konsolosluk harcını siz mi ödüyorsunuz?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">Konsolosluk harçları danışmanlık ücretlerimize dahil değildir. Bu ücretler doğrudan konsolosluk hesabına müşterilerimiz tarafından ödenmektedir. Güncel harç bilgilerini size önceden bildiriyoruz.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Ret aldıysam ne yapabilirim?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">Premium paketimizde ret durumunda ücretsiz itiraz desteği sunuyoruz. Diğer paketlerde ek ücretle itiraz başvurusu yapılabilir. Ret gerekçesini birlikte analiz edip güçlü bir itiraz dosyası hazırlıyoruz.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Daha önce ret aldım, başvuru yapabilir miyim?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">Evet! Daha önce ret almış olmanız yeni başvurunuzu otomatik olarak engellemiyor. Ret gerekçenizi inceleyerek güçlü bir yeni dosya hazırlıyoruz. Müşterilerimizin önemli bir kısmı daha önce ret almış kişilerdir.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Hangi şehirlerde hizmet veriyorsunuz?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">İstanbul ofisimiz ve online danışmanlık hizmetimiz ile Türkiye'nin her şehrinden başvurularınızı yönetebiliyoruz. Yüz yüze görüşmeler İstanbul ofisimizde gerçekleştirilmektedir.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-contact-box reveal">
+        <h3>Ücretsiz Danışma<br>Alın</h3>
+        <p>Uzman ekibimiz vize sürecinizi değerlendirip size özel yol haritası oluştursun.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:2px;">Telefon</div>
+              +90 (212) 555 08 08
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">💬</div>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:2px;">WhatsApp</div>
+              +90 (532) 555 08 08
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:2px;">E-posta</div>
+              info@visapath.com.tr
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">🏢</div>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:2px;">Ofis</div>
+              Levent, İstanbul
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" style="width:100%;font-size:14px;padding:15px;" onclick="alert('Danışma talebi alındı! En kısa sürede iletişime geçeceğiz.')">Randevu Al →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Visa<span>Path</span></div>
+      <p>Türkiye'nin önde gelen vize danışmanlık firması. 2014'ten bu yana 12.000+ başarılı başvuru.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Hizmetler</h4>
+      <ul>
+        <li><a href="#">Turizm Vizesi</a></li>
+        <li><a href="#">Öğrenci Vizesi</a></li>
+        <li><a href="#">Çalışma Vizesi</a></li>
+        <li><a href="#">Oturma İzni</a></li>
+        <li><a href="#">Aile Birleşimi</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Ülkeler</h4>
+      <ul>
+        <li><a href="#">Schengen Bölgesi</a></li>
+        <li><a href="#">Amerika</a></li>
+        <li><a href="#">İngiltere</a></li>
+        <li><a href="#">Kanada</a></li>
+        <li><a href="#">Avustralya</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Şirket</h4>
+      <ul>
+        <li><a href="#">Hakkımızda</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Kariyer</a></li>
+        <li><a href="#">Gizlilik Politikası</a></li>
+        <li><a href="#">İletişim</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 VisaPath Danışmanlık A.Ş. — Tüm hakları saklıdır.</p>
+    <p style="color:rgba(201,168,76,0.5)">Made with ♥ in Istanbul</p>
+  </div>
+</footer>
+
+<!-- Floating CTA -->
+<a href="#iletisim" class="float-cta">💬 Ücretsiz Danış</a>
+
+<script>
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(r => observer.observe(r));
+
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('.faq-icon');
+    const isOpen = answer.classList.contains('open');
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('open'));
+    if (!isOpen) { answer.classList.add('open'); icon.classList.add('open'); }
+  }
+
+  // Nav shrink on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.padding = window.scrollY > 60 ? '12px 60px' : '20px 60px';
+  });
+</script>
+</body>
+</html>
