@@ -304,79 +304,6 @@
   }
   .step-title { font-size: 15px; font-weight: 500; color: var(--navy); margin-bottom: 8px; }
   .step-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
-
-  /* PRICING */
-  .pricing { background: var(--cream); }
-  .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 60px; }
-  .pricing-card {
-    background: var(--white);
-    border: 1px solid var(--light-gray);
-    border-radius: 10px; padding: 40px 32px;
-    position: relative; transition: all 0.3s;
-  }
-  .pricing-card:hover { transform: translateY(-6px); box-shadow: 0 24px 80px rgba(11,31,58,0.12); }
-  .pricing-card.featured {
-    background: var(--navy);
-    border-color: var(--gold);
-    transform: scale(1.03);
-  }
-  .pricing-card.featured:hover { transform: scale(1.03) translateY(-6px); }
-  .featured-badge {
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    background: var(--gold); color: var(--navy);
-    font-size: 11px; font-weight: 600; padding: 5px 16px; border-radius: 20px;
-    letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap;
-  }
-  .plan-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px; color: var(--navy); margin-bottom: 6px;
-  }
-  .pricing-card.featured .plan-name { color: var(--white); }
-  .plan-subtitle { font-size: 13px; color: var(--gray); margin-bottom: 28px; }
-  .pricing-card.featured .plan-subtitle { color: rgba(255,255,255,0.55); }
-  .price {
-    margin-bottom: 32px; padding-bottom: 28px;
-    border-bottom: 1px solid var(--light-gray);
-  }
-  .pricing-card.featured .price { border-color: rgba(255,255,255,0.1); }
-  .price-amount {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 52px; color: var(--navy); line-height: 1;
-  }
-  .pricing-card.featured .price-amount { color: var(--gold); }
-  .price-currency { font-size: 22px; vertical-align: super; margin-right: 4px; }
-  .price-period { font-size: 13px; color: var(--gray); margin-top: 6px; }
-  .pricing-card.featured .price-period { color: rgba(255,255,255,0.45); }
-  .features-list { list-style: none; margin-bottom: 32px; }
-  .features-list li {
-    display: flex; align-items: flex-start; gap: 12px;
-    font-size: 14px; color: var(--text);
-    padding: 9px 0; border-bottom: 1px solid var(--light-gray);
-  }
-  .pricing-card.featured .features-list li { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.07); }
-  .features-list li::before {
-    content: '✓';
-    color: var(--gold); font-size: 13px; font-weight: 600;
-    flex-shrink: 0; margin-top: 1px;
-  }
-  .features-list li.excluded { opacity: 0.4; }
-  .features-list li.excluded::before { content: '–'; color: var(--gray); }
-  .btn-plan {
-    width: 100%; padding: 14px;
-    border: 1px solid var(--navy);
-    background: transparent; color: var(--navy);
-    border-radius: 4px; font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 500;
-    cursor: pointer; transition: all 0.2s;
-    letter-spacing: 0.3px;
-  }
-  .btn-plan:hover { background: var(--navy); color: var(--white); }
-  .pricing-card.featured .btn-plan {
-    background: var(--gold); color: var(--navy);
-    border-color: var(--gold);
-  }
-  .pricing-card.featured .btn-plan:hover { background: var(--gold-light); }
-
   /* TESTIMONIALS */
   .testimonials { background: var(--white); }
   .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 56px; }
@@ -498,14 +425,13 @@
     .hero { padding: 100px 24px 60px; }
     .hero-grid, .services-header, .faq-grid, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
     .hero-visual { display: none; }
-    .services-grid, .pricing-grid, .testimonials-grid, .countries-grid { grid-template-columns: 1fr 1fr; }
+    .services-grid, .testimonials-grid, .countries-grid { grid-template-columns: 1fr 1fr; }
     .process-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
     .process-steps::before { display: none; }
-    .pricing-card.featured { transform: none; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 600px) {
-    .services-grid, .pricing-grid, .testimonials-grid, .countries-grid { grid-template-columns: 1fr; }
+    .services-grid, .testimonials-grid, .countries-grid { grid-template-columns: 1fr; }
     .hero-stats { flex-wrap: wrap; gap: 24px; }
   }
 </style>
@@ -519,7 +445,6 @@
     <li><a href="#hizmetler">Hizmetler</a></li>
     <li><a href="#ulkeler">Ülkeler</a></li>
     <li><a href="#surec">Süreç</a></li>
-    <li><a href="#fiyatlar">Fiyatlar</a></li>
     <li><a href="#iletisim" class="nav-cta">Ücretsiz Danışma</a></li>
   </ul>
 </nav>
@@ -534,7 +459,7 @@
         Schengen'den ABD'ye, öğrenci vizesinden çalışma iznine — tüm vize süreçlerinizde uzman kadromuzla yanınızdayız. Belgelerinizi hazırlıyor, randevunuzu alıyor, başarıya ulaşıyoruz.
       </p>
       <div class="hero-btns">
-        <a href="#fiyatlar" class="btn-primary">Hemen Başla</a>
+        <a href="#iletisim" class="btn-primary">Hemen Başla</a>
         <a href="#surec" class="btn-secondary">Nasıl Çalışır?</a>
       </div>
       <div class="hero-stats">
@@ -694,84 +619,6 @@
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="pricing" id="fiyatlar">
-  <div class="section-inner">
-    <div style="text-align:center" class="reveal">
-      <div class="section-label">Fiyatlandırma</div>
-      <h2>Şeffaf & <em>Uygun Fiyatlar</em></h2>
-      <p style="color:var(--gray);margin-top:14px;font-size:15px;">Konsolosluk harçları hariç danışmanlık ücretlerimiz. KDV dahil.</p>
-    </div>
-    <div class="pricing-grid">
-
-      <!-- Temel -->
-      <div class="pricing-card reveal">
-        <div class="plan-name">Temel</div>
-        <div class="plan-subtitle">Basit başvurular için</div>
-        <div class="price">
-          <div class="price-amount"><span class="price-currency">₺</span>1.490</div>
-          <div class="price-period">tek seferlik ödeme</div>
-        </div>
-        <ul class="features-list">
-          <li>Evrak listesi ve rehberlik</li>
-          <li>Vize formu doldurma</li>
-          <li>Ön değerlendirme</li>
-          <li>E-posta desteği</li>
-          <li class="excluded">Randevu alma hizmeti</li>
-          <li class="excluded">Birebir görüşme</li>
-          <li class="excluded">Ret durumunda itiraz</li>
-        </ul>
-        <button class="btn-plan" onclick="alert('Temel paket için iletişime geçin!')">Paketi Seç</button>
-      </div>
-
-      <!-- Standart (featured) -->
-      <div class="pricing-card featured reveal" style="transition-delay:0.1s">
-        <div class="featured-badge">⭐ En Çok Tercih</div>
-        <div class="plan-name">Standart</div>
-        <div class="plan-subtitle">Tam kapsamlı hizmet</div>
-        <div class="price">
-          <div class="price-amount"><span class="price-currency">₺</span>2.990</div>
-          <div class="price-period">tek seferlik ödeme</div>
-        </div>
-        <ul class="features-list">
-          <li>Kapsamlı evrak hazırlama</li>
-          <li>Vize formu doldurma</li>
-          <li>Randevu alma hizmeti</li>
-          <li>Birebir online görüşme</li>
-          <li>WhatsApp destek hattı</li>
-          <li>Mülakat hazırlık koçluğu</li>
-          <li class="excluded">Ret durumunda itiraz</li>
-        </ul>
-        <button class="btn-plan" onclick="alert('Standart paket için iletişime geçin!')">Paketi Seç</button>
-      </div>
-
-      <!-- Premium -->
-      <div class="pricing-card reveal" style="transition-delay:0.2s">
-        <div class="plan-name">Premium</div>
-        <div class="plan-subtitle">Garantili başarı hedefi</div>
-        <div class="price">
-          <div class="price-amount"><span class="price-currency">₺</span>4.990</div>
-          <div class="price-period">tek seferlik ödeme</div>
-        </div>
-        <ul class="features-list">
-          <li>VIP evrak hazırlama</li>
-          <li>Vize formu doldurma</li>
-          <li>Öncelikli randevu takibi</li>
-          <li>Sınırsız görüşme hakkı</li>
-          <li>7/24 öncelikli destek</li>
-          <li>Mülakat hazırlık koçluğu</li>
-          <li>Ret durumunda ücretsiz itiraz</li>
-        </ul>
-        <button class="btn-plan" onclick="alert('Premium paket için iletişime geçin!')">Paketi Seç</button>
-      </div>
-
-    </div>
-    <div style="text-align:center;margin-top:28px;" class="reveal">
-      <p style="color:var(--gray);font-size:13px;">💡 Oturma izni ve göçmenlik hizmetleri için özel teklif alabilirsiniz. <a href="#iletisim" style="color:var(--gold);">Bize ulaşın →</a></p>
-    </div>
-  </div>
-</section>
-
 <!-- TESTIMONIALS -->
 <section class="testimonials">
   <div class="section-inner">
@@ -888,7 +735,7 @@
             <div class="contact-icon">📧</div>
             <div>
               <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:2px;">E-posta</div>
-              info@visapath.com.tr
+              <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80e9eee6efc0f6e9f3e1f0e1f4e8aee3efedaef4f2">[email&#160;protected]</a>
             </div>
           </div>
           <div class="contact-item">
@@ -952,7 +799,7 @@
 <!-- Floating CTA -->
 <a href="#iletisim" class="float-cta">💬 Ücretsiz Danış</a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
@@ -967,14 +814,4 @@
     const isOpen = answer.classList.contains('open');
     document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
     document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('open'));
-    if (!isOpen) { answer.classList.add('open'); icon.classList.add('open'); }
-  }
-
-  // Nav shrink on scroll
-  window.addEventListener('scroll', () => {
-    const nav = document.querySelector('nav');
-    nav.style.padding = window.scrollY > 60 ? '12px 60px' : '20px 60px';
-  });
-</script>
-</body>
-</html>
+    if (!isOpen) { answer.classList.add('open'); icon.classList.add('open')
