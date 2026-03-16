@@ -10,10 +10,10 @@ import {
   Kanban,
   CheckSquare,
   FileSpreadsheet,
+  UserCog,
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Menu,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -24,6 +24,7 @@ const navItems = [
   { href: "/crm/pipeline", label: "Satış Pipeline", icon: Kanban },
   { href: "/crm/tasks", label: "Görevler", icon: CheckSquare },
   { href: "/crm/reports", label: "Raporlar", icon: FileSpreadsheet },
+  { href: "/crm/users", label: "Kullanıcılar", icon: UserCog },
 ];
 
 export default function Sidebar() {
