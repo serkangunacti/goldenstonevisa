@@ -1,7 +1,9 @@
 "use client";
 
-import Sidebar from "./Sidebar";
-import AuthGuard from "./AuthGuard";
+import dynamic from "next/dynamic";
+
+const Sidebar = dynamic(() => import("./Sidebar"), { ssr: false });
+const AuthGuard = dynamic(() => import("./AuthGuard"), { ssr: false });
 
 export default function CrmShell({ children }: { children: React.ReactNode }) {
   return (
