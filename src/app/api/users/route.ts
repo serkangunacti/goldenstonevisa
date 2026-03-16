@@ -1,6 +1,8 @@
 import { adminAuth } from "@/lib/firebase-admin";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // Kullanıcıları listele
 export async function GET() {
   try {
