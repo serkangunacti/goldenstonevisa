@@ -3,7 +3,7 @@
 import CrmShell from "@/components/crm/CrmShell";
 import { useEffect, useState } from "react";
 import { subscribeToCollection, Customer, Lead, Task } from "@/lib/firestore";
-import { Users, Target, TrendingUp, CheckSquare, Clock, AlertCircle } from "lucide-react";
+import { Users, Target, TrendingUp, CheckSquare, Clock } from "lucide-react";
 
 interface StatCard {
   label: string;
@@ -75,10 +75,10 @@ export default function DashboardPage() {
 
   return (
     <CrmShell>
-      <div className="p-6 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 text-sm mt-1">Genel bakış ve özet bilgiler</p>
         </div>
 

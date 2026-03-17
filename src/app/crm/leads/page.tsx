@@ -84,46 +84,46 @@ export default function LeadsPage() {
 
   return (
     <CrmShell>
-      <div className="p-6 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
+        <div className="flex items-start justify-between mb-6 gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Lead & Fırsat Takibi</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Lead & Fırsat Takibi</h1>
             <p className="text-gray-500 text-sm mt-1">{leads.length} kayıt</p>
           </div>
-          <div className="flex gap-3">
-            <button onClick={exportExcel} className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition shadow">
-              <Download size={16} /> Excel
+          <div className="flex gap-2 flex-shrink-0">
+            <button onClick={exportExcel} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition shadow">
+              <Download size={15} /> <span className="hidden sm:inline">Excel</span>
             </button>
-            <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition shadow">
-              <Plus size={16} /> Yeni Lead
+            <button onClick={openAdd} className="flex items-center gap-1.5 px-3 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition shadow">
+              <Plus size={15} /> <span className="hidden sm:inline">Yeni Lead</span><span className="sm:hidden">Ekle</span>
             </button>
           </div>
         </div>
 
-        {/* Kanban-style summary */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-6">
+        {/* Status summary */}
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-6">
           {["Yeni", "İletişime Geçildi", "Nitelikli", "Teklif Verildi", "Kazanıldı", "Kaybedildi"].map((s) => (
             <button
               key={s}
               onClick={() => setStatusFilter(statusFilter === s ? "Tümü" : s)}
-              className={`p-3 rounded-xl border text-center transition ${statusFilter === s ? "border-indigo-400 bg-indigo-50" : "border-gray-100 bg-white hover:border-gray-200"}`}
+              className={`p-2.5 rounded-xl border text-center transition ${statusFilter === s ? "border-indigo-400 bg-indigo-50" : "border-gray-100 bg-white hover:border-gray-200"}`}
             >
-              <div className="text-xl font-bold text-gray-900">{leads.filter((l) => l.durum === s).length}</div>
-              <div className={`text-xs mt-1 px-1.5 py-0.5 rounded-full ${STATUS_COLORS[s]}`}>{s}</div>
+              <div className="text-lg font-bold text-gray-900">{leads.filter((l) => l.durum === s).length}</div>
+              <div className={`text-xs mt-1 px-1 py-0.5 rounded-full leading-tight ${STATUS_COLORS[s]}`}>{s}</div>
             </button>
           ))}
         </div>
 
-        {/* Filters */}
-        <div className="flex gap-3 mb-5">
-          <div className="relative flex-1">
+        {/* Search */}
+        <div className="mb-5">
+          <div className="relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Ad veya e-posta ara..." className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* Desktop Table */}
+        <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
@@ -161,17 +161,44 @@ export default function LeadsPage() {
             </table>
           </div>
         </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-3">
+          {filtered.length === 0 ? (
+            <div className="text-center py-12 text-gray-400 bg-white rounded-2xl border border-gray-100">Kayıt bulunamadı</div>
+          ) : filtered.map((l) => (
+            <div key={l.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">{l.ad}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{l.email}</p>
+                  {l.telefon && <p className="text-xs text-gray-500">{l.telefon}</p>}
+                </div>
+                <div className="flex gap-1 flex-shrink-0">
+                  <button onClick={() => openEdit(l)} className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"><Edit2 size={15} /></button>
+                  <button onClick={() => setDeleteId(l.id!)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"><Trash2 size={15} /></button>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[l.durum] || "bg-gray-100 text-gray-700"}`}>{l.durum}</span>
+                <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-600">{l.ilgiAlani}</span>
+                {l.hedefUlke && <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-600">{l.hedefUlke}</span>}
+              </div>
+              <p className="text-sm font-semibold text-gray-700 mt-2">₺{l.tahminiDeger.toLocaleString("tr-TR")}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-5 border-b">
               <h2 className="text-lg font-semibold">{editId ? "Lead Düzenle" : "Yeni Lead Ekle"}</h2>
               <button onClick={closeForm} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
-            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ad Soyad *</label>
                 <input value={form.ad} onChange={(e) => F("ad", e.target.value)} className="input-field" placeholder="Ad Soyad" />
@@ -215,7 +242,7 @@ export default function LeadsPage() {
                 <textarea value={form.notlar} onChange={(e) => F("notlar", e.target.value)} className="input-field resize-none h-24" />
               </div>
             </div>
-            <div className="flex gap-3 justify-end p-6 border-t">
+            <div className="flex gap-3 justify-end p-5 border-t">
               <button onClick={closeForm} className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm hover:bg-gray-50">İptal</button>
               <button onClick={handleSave} disabled={!form.ad || saving} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 disabled:opacity-50">
                 {saving ? "Kaydediliyor..." : "Kaydet"}

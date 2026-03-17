@@ -14,6 +14,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -27,18 +28,28 @@ const navItems = [
   { href: "/crm/users", label: "Kullanıcılar", icon: UserCog },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { logout, user } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
-  return (
+  const sidebarContent = (isMobile: boolean) => (
     <aside
-      className={`${collapsed ? "w-16" : "w-64"} min-h-screen bg-gradient-to-b from-indigo-700 to-purple-800 flex flex-col transition-all duration-300 shadow-xl`}
+      className={`
+        ${isMobile ? "w-64" : collapsed ? "w-16" : "w-64"}
+        min-h-screen bg-gradient-to-b from-indigo-700 to-purple-800 flex flex-col
+        ${isMobile ? "" : "transition-all duration-300"}
+        shadow-xl
+      `}
     >
       {/* Logo */}
       <div className="flex items-center justify-between px-4 py-5 border-b border-white/20">
-        {!collapsed && (
+        {(isMobile || !collapsed) && (
           <div>
             <p className="text-white font-bold text-lg leading-tight" style={{ fontFamily: "Playfair Display, serif" }}>
               Goldstone
@@ -46,12 +57,21 @@ export default function Sidebar() {
             <p className="text-indigo-200 text-xs">Visa CRM</p>
           </div>
         )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition"
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
+        {isMobile ? (
+          <button
+            onClick={onClose}
+            className="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition"
+          >
+            <X size={18} />
+          </button>
+        ) : (
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition"
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        )}
       </div>
 
       {/* Nav */}
@@ -62,15 +82,16 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={isMobile ? onClose : undefined}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                 active
                   ? "bg-white text-indigo-700 shadow font-semibold"
                   : "text-indigo-100 hover:bg-white/15 hover:text-white"
               }`}
-              title={collapsed ? label : undefined}
+              title={!isMobile && collapsed ? label : undefined}
             >
               <Icon size={20} className="flex-shrink-0" />
-              {!collapsed && <span className="text-sm">{label}</span>}
+              {(isMobile || !collapsed) && <span className="text-sm">{label}</span>}
             </Link>
           );
         })}
@@ -78,18 +99,40 @@ export default function Sidebar() {
 
       {/* User & Logout */}
       <div className="border-t border-white/20 p-3">
-        {!collapsed && (
+        {(isMobile || !collapsed) && (
           <p className="text-indigo-200 text-xs px-2 mb-2 truncate">{user?.email}</p>
         )}
         <button
           onClick={logout}
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-indigo-100 hover:bg-white/15 hover:text-white transition"
-          title={collapsed ? "Çıkış" : undefined}
+          title={!isMobile && collapsed ? "Çıkış" : undefined}
         >
           <LogOut size={20} className="flex-shrink-0" />
-          {!collapsed && <span className="text-sm">Çıkış Yap</span>}
+          {(isMobile || !collapsed) && <span className="text-sm">Çıkış Yap</span>}
         </button>
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Mobile overlay drawer */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 lg:hidden"
+          onClick={onClose}
+        >
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-y-0 left-0" onClick={(e) => e.stopPropagation()}>
+            {sidebarContent(true)}
+          </div>
+        </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <div className="hidden lg:flex">
+        {sidebarContent(false)}
+      </div>
+    </>
   );
 }

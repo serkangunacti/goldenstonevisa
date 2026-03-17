@@ -112,26 +112,26 @@ export default function CustomersPage() {
 
   return (
     <CrmShell>
-      <div className="p-6 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-start justify-between mb-6 gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Müşteri Yönetimi</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Müşteri Yönetimi</h1>
             <p className="text-gray-500 text-sm mt-1">{customers.length} kayıt</p>
           </div>
-          <div className="flex gap-3">
-            <button onClick={exportExcel} className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition shadow">
-              <Download size={16} /> Excel
+          <div className="flex gap-2 flex-shrink-0">
+            <button onClick={exportExcel} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition shadow">
+              <Download size={15} /> <span className="hidden sm:inline">Excel</span>
             </button>
-            <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition shadow">
-              <Plus size={16} /> Yeni Müşteri
+            <button onClick={openAdd} className="flex items-center gap-1.5 px-3 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition shadow">
+              <Plus size={15} /> <span className="hidden sm:inline">Yeni Müşteri</span><span className="sm:hidden">Ekle</span>
             </button>
           </div>
         </div>
 
         {/* Filters */}
         <div className="flex gap-3 mb-5 flex-wrap">
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative flex-1 min-w-[180px]">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               value={search}
@@ -143,7 +143,7 @@ export default function CustomersPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             {["Tümü", "Yeni", "Devam Ediyor", "Olumlu", "Olumsuz", "Beklemede"].map((s) => (
               <option key={s}>{s}</option>
@@ -151,8 +151,8 @@ export default function CustomersPage() {
           </select>
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* Desktop Table */}
+        <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
@@ -211,17 +211,57 @@ export default function CustomersPage() {
             </table>
           </div>
         </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-3">
+          {filtered.length === 0 ? (
+            <div className="text-center py-12 text-gray-400 bg-white rounded-2xl border border-gray-100">
+              Kayıt bulunamadı
+            </div>
+          ) : filtered.map((c) => (
+            <div key={c.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">{c.ad}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{c.musteriTipi} · {c.vizeTipi} · {c.hedefUlke}</p>
+                </div>
+                <div className="flex gap-1 flex-shrink-0">
+                  <button onClick={() => openEdit(c)} className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                    <Edit2 size={15} />
+                  </button>
+                  <button onClick={() => setDeleteId(c.id!)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition">
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[c.islemAsamasi] || "bg-gray-100 text-gray-700"}`}>
+                  {c.islemAsamasi}
+                </span>
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${PAYMENT_COLORS[c.odemeDurumu] || "bg-gray-100 text-gray-700"}`}>
+                  {c.odemeDurumu}
+                </span>
+                {c.botKullanimi && (
+                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
+                    Bot ₺{c.botUcreti.toLocaleString("tr-TR")}
+                  </span>
+                )}
+              </div>
+              <p className="text-sm font-semibold text-gray-700 mt-2">₺{c.odemetutari.toLocaleString("tr-TR")}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-5 border-b">
               <h2 className="text-lg font-semibold">{editId ? "Müşteri Düzenle" : "Yeni Müşteri Ekle"}</h2>
               <button onClick={closeForm} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
-            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Adı *</label>
                 <input value={form.ad} onChange={(e) => F("ad", e.target.value)} className="input-field" placeholder="Ad Soyad" />
@@ -279,7 +319,7 @@ export default function CustomersPage() {
                 <textarea value={form.notlar} onChange={(e) => F("notlar", e.target.value)} className="input-field resize-none h-24" placeholder="Ek notlar..." />
               </div>
             </div>
-            <div className="flex gap-3 justify-end p-6 border-t">
+            <div className="flex gap-3 justify-end p-5 border-t">
               <button onClick={closeForm} className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 transition">İptal</button>
               <button onClick={handleSave} disabled={!form.ad || saving} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50">
                 {saving ? "Kaydediliyor..." : "Kaydet"}
