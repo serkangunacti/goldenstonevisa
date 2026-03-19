@@ -7,6 +7,7 @@ interface Rates {
   USD: { effectiveSelling: string };
   EUR: { effectiveSelling: string };
   date: string;
+  source: string;
 }
 
 function formatRate(val: string) {
@@ -28,7 +29,9 @@ export default function ExchangeRateBanner() {
         const data = await res.json();
         if (!data.error) {
           setRates(data);
-          setLastUpdate(new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }));
+          setLastUpdate(
+            new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })
+          );
         }
       }
     } catch {
@@ -40,7 +43,6 @@ export default function ExchangeRateBanner() {
 
   useEffect(() => {
     fetchRates();
-    // Her 5 dakikada bir güncelle
     const interval = setInterval(fetchRates, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -51,7 +53,7 @@ export default function ExchangeRateBanner() {
       <div className="flex items-center gap-2">
         <TrendingUp size={16} className="text-indigo-200 flex-shrink-0" />
         <span className="text-indigo-100 text-xs font-medium whitespace-nowrap hidden sm:inline">
-          TCMB Efektif Satış
+          {rates?.source === "TCMB" ? "TCMB Efektif Satış" : "Döviz Kuru"}
         </span>
         <span className="text-indigo-100 text-xs font-medium sm:hidden">Kur</span>
       </div>
