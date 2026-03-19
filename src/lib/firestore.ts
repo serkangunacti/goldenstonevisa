@@ -27,11 +27,20 @@ export interface Customer {
   musteriTipi: string;
   vizeTipi: string;
   hedefUlke: string;
+  basvuruSehri?: string;
+  email?: string;
+  telefon?: string;
   botKullanimi: boolean;
   botUcreti: number;
   islemAsamasi: CustomerStatus;
   odemeDurumu: PaymentStatus;
   odemetutari: number;
+  odemetutariEuro?: number;
+  kdvDurumu?: "KDV Dahil" | "KDV Hariç";
+  kayitTarihi?: string;
+  kapamaTarihi?: string;
+  odemeTarihi?: string;
+  odemeKapamaTarihi?: string;
   notlar?: string;
   olusturmaTarihi?: Timestamp;
 }

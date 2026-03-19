@@ -9,7 +9,7 @@ import {
   updateRecord,
   deleteRecord,
 } from "@/lib/firestore";
-import { Plus, Search, Edit2, Trash2, X, Check, Download } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, X, Download } from "lucide-react";
 import * as XLSX from "xlsx";
 
 const EMPTY: Omit<Customer, "id" | "olusturmaTarihi"> = {
@@ -17,11 +17,20 @@ const EMPTY: Omit<Customer, "id" | "olusturmaTarihi"> = {
   musteriTipi: "Bireysel",
   vizeTipi: "Turizm",
   hedefUlke: "",
+  basvuruSehri: "",
+  email: "",
+  telefon: "",
   botKullanimi: false,
   botUcreti: 0,
   islemAsamasi: "Yeni",
   odemeDurumu: "Bekliyor",
   odemetutari: 0,
+  odemetutariEuro: 0,
+  kdvDurumu: "KDV Hariç",
+  kayitTarihi: "",
+  kapamaTarihi: "",
+  odemeTarihi: "",
+  odemeKapamaTarihi: "",
   notlar: "",
 };
 
@@ -54,8 +63,11 @@ export default function CustomersPage() {
   }, []);
 
   const filtered = customers.filter((c) => {
-    const matchSearch = c.ad.toLowerCase().includes(search.toLowerCase()) ||
-      c.hedefUlke.toLowerCase().includes(search.toLowerCase());
+    const matchSearch =
+      c.ad.toLowerCase().includes(search.toLowerCase()) ||
+      c.hedefUlke.toLowerCase().includes(search.toLowerCase()) ||
+      (c.email || "").toLowerCase().includes(search.toLowerCase()) ||
+      (c.telefon || "").toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "Tümü" || c.islemAsamasi === statusFilter;
     return matchSearch && matchStatus;
   });
@@ -94,12 +106,21 @@ export default function CustomersPage() {
       "Müşteri Tipi": c.musteriTipi,
       "Vize Tipi": c.vizeTipi,
       "Hedef Ülke": c.hedefUlke,
+      "Başvuru Şehri": c.basvuruSehri || "",
+      "E-posta": c.email || "",
+      "Telefon": c.telefon || "",
       "Bot Kullanımı": c.botKullanimi ? "Evet" : "Hayır",
       "Bot Ücreti (₺)": c.botUcreti,
       "İşlem Aşaması": c.islemAsamasi,
       "Ödeme Durumu": c.odemeDurumu,
       "Ödeme Tutarı (₺)": c.odemetutari,
-      "Notlar": c.notlar,
+      "Ödeme Tutarı (€)": c.odemetutariEuro || 0,
+      "KDV": c.kdvDurumu || "",
+      "Kayıt Tarihi": c.kayitTarihi || "",
+      "Kapama Tarihi": c.kapamaTarihi || "",
+      "Ödeme Tarihi": c.odemeTarihi || "",
+      "Ödeme Kapama Tarihi": c.odemeKapamaTarihi || "",
+      "Notlar": c.notlar || "",
     }));
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -136,7 +157,7 @@ export default function CustomersPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Müşteri veya ülke ara..."
+              placeholder="Ad, ülke, e-posta veya telefon ara..."
               className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
@@ -157,7 +178,7 @@ export default function CustomersPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  {["#", "Müşteri Adı", "Tipi", "Vize", "Ülke", "Bot", "Bot Ücr.", "Durum", "Ödeme", "Tutar", "İşlem"].map((h) => (
+                  {["#", "Müşteri Adı", "Tipi", "Vize", "Ülke", "Başv. Şehri", "Telefon", "Durum", "Ödeme", "₺ Tutar", "€ Tutar", "KDV", "Kayıt T.", "İşlem"].map((h) => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
@@ -167,22 +188,21 @@ export default function CustomersPage() {
               <tbody className="divide-y divide-gray-50">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={11} className="text-center py-12 text-gray-400">Kayıt bulunamadı</td>
+                    <td colSpan={14} className="text-center py-12 text-gray-400">Kayıt bulunamadı</td>
                   </tr>
                 ) : (
                   filtered.map((c, i) => (
                     <tr key={c.id} className="hover:bg-gray-50 transition">
                       <td className="px-4 py-3 text-gray-400">{i + 1}</td>
-                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">{c.ad}</td>
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <div>{c.ad}</div>
+                        {c.email && <div className="text-xs text-gray-400">{c.email}</div>}
+                      </td>
                       <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.musteriTipi}</td>
                       <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.vizeTipi}</td>
                       <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.hedefUlke}</td>
-                      <td className="px-4 py-3 text-center">
-                        {c.botKullanimi
-                          ? <Check size={16} className="text-green-500 mx-auto" />
-                          : <X size={16} className="text-red-400 mx-auto" />}
-                      </td>
-                      <td className="px-4 py-3 text-gray-600">₺{c.botUcreti.toLocaleString("tr-TR")}</td>
+                      <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.basvuruSehri || "—"}</td>
+                      <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.telefon || "—"}</td>
                       <td className="px-4 py-3">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[c.islemAsamasi] || "bg-gray-100 text-gray-700"}`}>
                           {c.islemAsamasi}
@@ -193,7 +213,10 @@ export default function CustomersPage() {
                           {c.odemeDurumu}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-gray-600">₺{c.odemetutari.toLocaleString("tr-TR")}</td>
+                      <td className="px-4 py-3 text-gray-600 whitespace-nowrap">₺{c.odemetutari.toLocaleString("tr-TR")}</td>
+                      <td className="px-4 py-3 text-gray-600 whitespace-nowrap">€{(c.odemetutariEuro || 0).toLocaleString("tr-TR")}</td>
+                      <td className="px-4 py-3 text-gray-600 whitespace-nowrap text-xs">{c.kdvDurumu || "—"}</td>
+                      <td className="px-4 py-3 text-gray-500 whitespace-nowrap text-xs">{c.kayitTarihi || "—"}</td>
                       <td className="px-4 py-3">
                         <div className="flex gap-1">
                           <button onClick={() => openEdit(c)} className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
@@ -224,6 +247,9 @@ export default function CustomersPage() {
                 <div className="min-w-0">
                   <p className="font-semibold text-gray-900 truncate">{c.ad}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{c.musteriTipi} · {c.vizeTipi} · {c.hedefUlke}</p>
+                  {c.telefon && <p className="text-xs text-gray-500">{c.telefon}</p>}
+                  {c.email && <p className="text-xs text-gray-400">{c.email}</p>}
+                  {c.basvuruSehri && <p className="text-xs text-gray-400">Şehir: {c.basvuruSehri}</p>}
                 </div>
                 <div className="flex gap-1 flex-shrink-0">
                   <button onClick={() => openEdit(c)} className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
@@ -241,13 +267,29 @@ export default function CustomersPage() {
                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${PAYMENT_COLORS[c.odemeDurumu] || "bg-gray-100 text-gray-700"}`}>
                   {c.odemeDurumu}
                 </span>
+                {c.kdvDurumu && (
+                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+                    {c.kdvDurumu}
+                  </span>
+                )}
                 {c.botKullanimi && (
                   <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
                     Bot ₺{c.botUcreti.toLocaleString("tr-TR")}
                   </span>
                 )}
               </div>
-              <p className="text-sm font-semibold text-gray-700 mt-2">₺{c.odemetutari.toLocaleString("tr-TR")}</p>
+              <div className="flex gap-4 mt-2">
+                <p className="text-sm font-semibold text-gray-700">₺{c.odemetutari.toLocaleString("tr-TR")}</p>
+                {(c.odemetutariEuro || 0) > 0 && (
+                  <p className="text-sm font-semibold text-gray-700">€{(c.odemetutariEuro || 0).toLocaleString("tr-TR")}</p>
+                )}
+              </div>
+              {(c.kayitTarihi || c.odemeTarihi) && (
+                <div className="flex gap-4 mt-1 text-xs text-gray-400">
+                  {c.kayitTarihi && <span>Kayıt: {c.kayitTarihi}</span>}
+                  {c.odemeTarihi && <span>Ödeme: {c.odemeTarihi}</span>}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -262,9 +304,19 @@ export default function CustomersPage() {
               <button onClick={closeForm} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+              {/* Temel Bilgiler */}
               <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Adı *</label>
                 <input value={form.ad} onChange={(e) => F("ad", e.target.value)} className="input-field" placeholder="Ad Soyad" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">E-posta</label>
+                <input type="email" value={form.email || ""} onChange={(e) => F("email", e.target.value)} className="input-field" placeholder="ornek@mail.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Telefon Numarası</label>
+                <input type="tel" value={form.telefon || ""} onChange={(e) => F("telefon", e.target.value)} className="input-field" placeholder="+90 5xx xxx xx xx" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Tipi</label>
@@ -283,6 +335,12 @@ export default function CustomersPage() {
                 <input value={form.hedefUlke} onChange={(e) => F("hedefUlke", e.target.value)} className="input-field" placeholder="Almanya, Hollanda..." />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Başvuru Yapılan Şehir</label>
+                <input value={form.basvuruSehri || ""} onChange={(e) => F("basvuruSehri", e.target.value)} className="input-field" placeholder="İstanbul, Ankara..." />
+              </div>
+
+              {/* İşlem & Ödeme */}
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">İşlem Aşaması</label>
                 <select value={form.islemAsamasi} onChange={(e) => F("islemAsamasi", e.target.value as Customer["islemAsamasi"])} className="input-field">
                   {["Yeni", "Devam Ediyor", "Olumlu", "Olumsuz", "Beklemede"].map((o) => <option key={o}>{o}</option>)}
@@ -298,6 +356,36 @@ export default function CustomersPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ödeme Tutarı (₺)</label>
                 <input type="number" value={form.odemetutari} onChange={(e) => F("odemetutari", Number(e.target.value))} className="input-field" />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Ödeme Tutarı (€)</label>
+                <input type="number" value={form.odemetutariEuro || 0} onChange={(e) => F("odemetutariEuro", Number(e.target.value))} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">KDV Durumu</label>
+                <select value={form.kdvDurumu || "KDV Hariç"} onChange={(e) => F("kdvDurumu", e.target.value)} className="input-field">
+                  {["KDV Dahil", "KDV Hariç"].map((o) => <option key={o}>{o}</option>)}
+                </select>
+              </div>
+
+              {/* Tarihler */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Kayıt Tarihi</label>
+                <input type="date" value={form.kayitTarihi || ""} onChange={(e) => F("kayitTarihi", e.target.value)} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Kapama Tarihi</label>
+                <input type="date" value={form.kapamaTarihi || ""} onChange={(e) => F("kapamaTarihi", e.target.value)} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Ödeme Tarihi</label>
+                <input type="date" value={form.odemeTarihi || ""} onChange={(e) => F("odemeTarihi", e.target.value)} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Ödeme Kapama Tarihi</label>
+                <input type="date" value={form.odemeKapamaTarihi || ""} onChange={(e) => F("odemeKapamaTarihi", e.target.value)} className="input-field" />
+              </div>
+
+              {/* Bot */}
               <div className="flex items-center gap-3">
                 <label className="block text-sm font-medium text-gray-700">Bot Kullanımı</label>
                 <button
@@ -314,9 +402,11 @@ export default function CustomersPage() {
                   <input type="number" value={form.botUcreti} onChange={(e) => F("botUcreti", Number(e.target.value))} className="input-field" />
                 </div>
               )}
+
+              {/* Notlar */}
               <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Notlar</label>
-                <textarea value={form.notlar} onChange={(e) => F("notlar", e.target.value)} className="input-field resize-none h-24" placeholder="Ek notlar..." />
+                <textarea value={form.notlar || ""} onChange={(e) => F("notlar", e.target.value)} className="input-field resize-none h-24" placeholder="Ek notlar..." />
               </div>
             </div>
             <div className="flex gap-3 justify-end p-5 border-t">
