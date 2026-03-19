@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import ExchangeRateBanner from "./ExchangeRateBanner";
 
 const Sidebar = dynamic(() => import("./Sidebar"), { ssr: false });
 const AuthGuard = dynamic(() => import("./AuthGuard"), { ssr: false });
@@ -18,6 +19,9 @@ export default function CrmShell({ children }: { children: React.ReactNode }) {
           onClose={() => setMobileMenuOpen(false)}
         />
         <div className="flex-1 flex flex-col min-w-0">
+          {/* Exchange Rate Banner */}
+          <ExchangeRateBanner />
+
           {/* Mobile header */}
           <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
             <button
